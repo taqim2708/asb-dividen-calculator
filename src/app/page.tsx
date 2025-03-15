@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent } from "@mui/material";
 import { Button } from "@mui/material";
-import { Line } from "react-chartjs-2";
+import { Card, CardContent } from "@mui/material";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { Line } from "react-chartjs-2";
+import { useState } from "react";
+import Head from "next/head";
 
 // Register necessary Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -65,86 +66,98 @@ export default function ASBDividendCalculator() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-100 p-4 md:p-10">
-      <Card className="p-6 w-full max-w-md md:max-w-lg bg-white shadow-lg rounded-lg">
-        <CardContent>
-          <h2 className="text-xl font-bold mb-4 text-center">ASB Dividend Calculator</h2>
-          <div className="grid grid-cols-1 gap-4">
-            <div>
-              <label className="block mb-2 font-medium">Initial Investment Amount (RM):</label>
-              <input
-                type="number"
-                className="w-full p-2 border rounded mb-4"
-                value={balance}
-                min="0"
-                onChange={(e) => setBalance(parseFloat(e.target.value) || 0)}
-              />
-              <label className="block mb-2 font-medium">Monthly Deposit (RM):</label>
-              <input
-                type="number"
-                className="w-full p-2 border rounded mb-4"
-                value={monthlyDeposit}
-                min="0"
-                onChange={(e) => setMonthlyDeposit(parseFloat(e.target.value) || 0)}
-              />
-              <label className="block mb-2 font-medium">Investment Period (Years):</label>
-              <input
-                type="number"
-                className="w-full p-2 border rounded mb-4"
-                value={investmentPeriod}
-                min="1"
-                onChange={(e) => setInvestmentPeriod(parseFloat(e.target.value) || 1)}
-              />
-              <label className="block mb-2 font-medium">Dividend Rate (%):</label>
-              <input
-                type="number"
-                className="w-full p-2 border rounded mb-4"
-                value={dividendRate}
-                min="0"
-                onChange={(e) => setDividendRate(parseFloat(e.target.value) || 0)}
-              />
+    <>
+      <Head>
+        <title>ASB Dividend Calculator - Estimate Your Returns</title>
+        <meta name="description" content="Use this ASB dividend calculator to estimate your returns with monthly deposits, investment periods, and dividend rates." />
+        <meta name="keywords" content="ASB, dividend calculator, investment, finance, Malaysia, passive income" />
+        <meta name="author" content="Muhammad Mustaqim" />
+        <meta property="og:title" content="ASB Dividend Calculator - Estimate Your Returns" />
+        <meta property="og:description" content="Calculate your ASB investment growth over the years." />
+        <meta property="og:url" content="https://taqim2708.github.io/asb-dividen-calculator/" />
+        <meta property="og:image" content="https://taqim2708.github.io/asb-dividen-calculator/og-image.webp" />
+      </Head>
+      <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-100 p-4 md:p-10">
+        <Card className="p-6 w-full max-w-md md:max-w-lg bg-white shadow-lg rounded-lg">
+          <CardContent>
+            <h2 className="text-xl font-bold mb-4 text-center">ASB Dividend Calculator</h2>
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="block mb-2 font-medium">Initial Investment Amount (RM):</label>
+                <input
+                  type="number"
+                  className="w-full p-2 border rounded mb-4"
+                  value={balance}
+                  min="0"
+                  onChange={(e) => setBalance(parseFloat(e.target.value) || 0)}
+                />
+                <label className="block mb-2 font-medium">Monthly Deposit (RM):</label>
+                <input
+                  type="number"
+                  className="w-full p-2 border rounded mb-4"
+                  value={monthlyDeposit}
+                  min="0"
+                  onChange={(e) => setMonthlyDeposit(parseFloat(e.target.value) || 0)}
+                />
+                <label className="block mb-2 font-medium">Investment Period (Years):</label>
+                <input
+                  type="number"
+                  className="w-full p-2 border rounded mb-4"
+                  value={investmentPeriod}
+                  min="1"
+                  onChange={(e) => setInvestmentPeriod(parseFloat(e.target.value) || 1)}
+                />
+                <label className="block mb-2 font-medium">Dividend Rate (%):</label>
+                <input
+                  type="number"
+                  className="w-full p-2 border rounded mb-4"
+                  value={dividendRate}
+                  min="0"
+                  onChange={(e) => setDividendRate(parseFloat(e.target.value) || 0)}
+                />
 
-              <label className="block mb-2 font-medium">Bonus Rate (%):</label>
-              <input
-                type="number"
-                className="w-full p-2 border rounded mb-4"
-                value={bonusRate}
-                min="0"
-                onChange={(e) => setBonusRate(parseFloat(e.target.value) || 0)}
-              />
+                <label className="block mb-2 font-medium">Bonus Rate (%):</label>
+                <input
+                  type="number"
+                  className="w-full p-2 border rounded mb-4"
+                  value={bonusRate}
+                  min="0"
+                  onChange={(e) => setBonusRate(parseFloat(e.target.value) || 0)}
+                />
+              </div>
             </div>
-          </div>
-          <Button variant="contained" color="primary" fullWidth onClick={calculateASBDividend}>
-            Calculate
-          </Button>
-        </CardContent>
-      </Card>
-      {yearlyResults.length > 0 && (
-        <Card className="mt-6 md:mt-0 md:ml-6 p-4 bg-white shadow-lg rounded-lg w-full md:max-w-lg">
-          <h3 className="text-lg font-bold mb-2 text-center">Total Wealth Over the Years</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr>
-                  <th className="border border-gray-300 p-2">Year</th>
-                  <th className="border border-gray-300 p-2">Total Wealth (RM)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {yearlyResults.map((result) => (
-                  <tr key={result.year}>
-                    <td className="border border-gray-300 p-2">{result.year}</td>
-                    <td className="border border-gray-300 p-2">{result.totalWealth}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="mt-4">
-            <Line data={chartData} className="w-full h-auto" />
-          </div>
+            <Button variant="contained" color="primary" fullWidth onClick={calculateASBDividend}>
+              Calculate
+            </Button>
+          </CardContent>
         </Card>
-      )}
-    </div>
+        {yearlyResults.length > 0 && (
+          <Card className="mt-6 md:mt-0 md:ml-6 p-4 bg-white shadow-lg rounded-lg w-full md:max-w-lg">
+            <h3 className="text-lg font-bold mb-2 text-center">Total Wealth Over the Years</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse border border-gray-300">
+                <thead>
+                  <tr>
+                    <th className="border border-gray-300 p-2">Year</th>
+                    <th className="border border-gray-300 p-2">Total Wealth (RM)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {yearlyResults.map((result) => (
+                    <tr key={result.year}>
+                      <td className="border border-gray-300 p-2">{result.year}</td>
+                      <td className="border border-gray-300 p-2">{result.totalWealth}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-4">
+              <Line data={chartData} className="w-full h-auto" />
+            </div>
+          </Card>
+        )}
+      </div>
+    </>
   );
 }
