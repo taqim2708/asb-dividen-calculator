@@ -7,14 +7,41 @@ import { Line } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import Head from "next/head";
 
-const translations: Record<string, { title: string; calculate: string }> = {
+const translations: Record<string, {
+  title: string;
+  initialInvestment: string;
+  monthlyDeposit: string;
+  investmentPeriod: string;
+  dividendRate: string;
+  bonusRate: string;
+  calculate: string;
+  resultTitle: string;
+  year: string;
+  totalWealth: string
+}> = {
   en: {
     title: "ASB Dividend Calculator - Calculate Your ASB Investment Growth",
+    initialInvestment: "Initial Investment Amount (RM):",
+    monthlyDeposit: "Monthly Deposit (RM):",
+    investmentPeriod: "Investment Period (Years):",
+    dividendRate: "Dividend Rate (%):",
+    bonusRate: "Bonus Rate (%):",
     calculate: "Calculate",
+    resultTitle: "Total Wealth Over the Years",
+    year: "Year",
+    totalWealth: "Total Wealth (RM)"
   },
   ms: {
     title: "Kalkulator Dividen ASB - Kira Pertumbuhan Pelaburan ASB Anda",
+    initialInvestment: "Jumlah Pelaburan Awal (RM):",
+    monthlyDeposit: "Deposit Bulanan (RM):",
+    investmentPeriod: "Tempoh Pelaburan (Tahun):",
+    dividendRate: "Kadar Dividen (%):",
+    bonusRate: "Kadar Bonus (%):",
     calculate: "Kira",
+    resultTitle: "Jumlah Kekayaan Sepanjang Tempoh Pelauburan",
+    year: "Tahun",
+    totalWealth: "Jumlah Kekayaan (RM)"
   },
 };
 
@@ -79,7 +106,7 @@ export default function ASBDividendCalculator() {
     labels: yearlyResults.map((result) => result.year.toString()),
     datasets: [
       {
-        label: "Total Wealth (RM)",
+        label: translations[language].totalWealth,
         data: yearlyResults.map((result) => parseFloat(result.totalWealth)),
         borderColor: "#3b82f6",
         backgroundColor: "rgba(59, 130, 246, 0.5)",
@@ -111,7 +138,7 @@ export default function ASBDividendCalculator() {
             </div>
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label className="block mb-2 font-medium">Initial Investment Amount (RM):</label>
+                <label className="block mb-2 font-medium">{translations[language].initialInvestment}</label>
                 <input
                   type="number"
                   className="w-full p-2 border rounded mb-4"
@@ -119,7 +146,7 @@ export default function ASBDividendCalculator() {
                   min="0"
                   onChange={(e) => setBalance(parseFloat(e.target.value) || 0)}
                 />
-                <label className="block mb-2 font-medium">Monthly Deposit (RM):</label>
+                <label className="block mb-2 font-medium">{translations[language].monthlyDeposit}</label>
                 <input
                   type="number"
                   className="w-full p-2 border rounded mb-4"
@@ -127,7 +154,7 @@ export default function ASBDividendCalculator() {
                   min="0"
                   onChange={(e) => setMonthlyDeposit(parseFloat(e.target.value) || 0)}
                 />
-                <label className="block mb-2 font-medium">Investment Period (Years):</label>
+                <label className="block mb-2 font-medium">{translations[language].investmentPeriod}</label>
                 <input
                   type="number"
                   className="w-full p-2 border rounded mb-4"
@@ -135,7 +162,7 @@ export default function ASBDividendCalculator() {
                   min="1"
                   onChange={(e) => setInvestmentPeriod(parseFloat(e.target.value) || 1)}
                 />
-                <label className="block mb-2 font-medium">Dividend Rate (%):</label>
+                <label className="block mb-2 font-medium">{translations[language].dividendRate}</label>
                 <input
                   type="number"
                   className="w-full p-2 border rounded mb-4"
@@ -144,7 +171,7 @@ export default function ASBDividendCalculator() {
                   onChange={(e) => setDividendRate(parseFloat(e.target.value) || 0)}
                 />
 
-                <label className="block mb-2 font-medium">Bonus Rate (%):</label>
+                <label className="block mb-2 font-medium">{translations[language].bonusRate}</label>
                 <input
                   type="number"
                   className="w-full p-2 border rounded mb-4"
@@ -161,13 +188,13 @@ export default function ASBDividendCalculator() {
         </Card>
         {yearlyResults.length > 0 && (
           <Card className="mt-6 md:mt-0 md:ml-6 p-4 bg-white shadow-lg rounded-lg w-full md:max-w-lg">
-            <h3 className="text-lg font-bold mb-2 text-center">Total Wealth Over the Years</h3>
+            <h3 className="text-lg font-bold mb-2 text-center">{translations[language].resultTitle}</h3>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-300">
                 <thead>
                   <tr>
-                    <th className="border border-gray-300 p-2">Year</th>
-                    <th className="border border-gray-300 p-2">Total Wealth (RM)</th>
+                    <th className="border border-gray-300 p-2">{translations[language].year}</th>
+                    <th className="border border-gray-300 p-2">{translations[language].totalWealth}</th>
                   </tr>
                 </thead>
                 <tbody>
