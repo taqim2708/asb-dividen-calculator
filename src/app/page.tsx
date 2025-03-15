@@ -28,16 +28,16 @@ export default function ASBDividendCalculator() {
     let currentBalance = balance;
     const maxBonusBalance = 30000;
     const months = 12;
-    let results: YearlyResult[] = [];
+    const results: YearlyResult[] = [];
 
     for (let year = 1; year <= investmentPeriod; year++) {
       let totalDividend = 0;
       let totalBonus = 0;
 
       for (let month = 0; month < months; month++) {
-        let monthlyDividend = (currentBalance * (dividendRate / 100)) / 12;
-        let bonusBalance = Math.min(currentBalance, maxBonusBalance);
-        let monthlyBonus = (bonusBalance * (bonusRate / 100)) / 12;
+        const monthlyDividend = (currentBalance * (dividendRate / 100)) / 12;
+        const bonusBalance = Math.min(currentBalance, maxBonusBalance);
+        const monthlyBonus = (bonusBalance * (bonusRate / 100)) / 12;
 
         totalDividend += monthlyDividend;
         totalBonus += monthlyBonus;
