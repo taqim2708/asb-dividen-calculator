@@ -1,11 +1,22 @@
 "use client";
 
 import { Button } from "@mui/material";
-import { Card, CardContent } from "@mui/material";
+import { Card, CardContent, MenuItem, Select } from "@mui/material";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
+
+const translations: Record<string, { title: string; calculate: string }> = {
+  en: {
+    title: "ASB Dividend Calculator - Calculate Your ASB Investment Growth",
+    calculate: "Calculate",
+  },
+  ms: {
+    title: "Kalkulator Dividen ASB - Kira Pertumbuhan Pelaburan ASB Anda",
+    calculate: "Kira",
+  },
+};
 
 // Register necessary Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -17,10 +28,11 @@ interface YearlyResult {
 
 export default function ASBDividendCalculator() {
   const [balance, setBalance] = useState<number>(50000);
-  const [monthlyDeposit, setMonthlyDeposit] = useState<number>(0);
-  const [investmentPeriod, setInvestmentPeriod] = useState<number>(1);
-  const [dividendRate, setDividendRate] = useState<number>(5);
   const [bonusRate, setBonusRate] = useState<number>(0.5);
+  const [dividendRate, setDividendRate] = useState<number>(5);
+  const [investmentPeriod, setInvestmentPeriod] = useState<number>(1);
+  const [language, setLanguage] = useState("ms");
+  const [monthlyDeposit, setMonthlyDeposit] = useState<number>(0);
   const [yearlyResults, setYearlyResults] = useState<YearlyResult[]>([]);
 
   function calculateASBDividend() {
@@ -53,6 +65,16 @@ export default function ASBDividendCalculator() {
     setYearlyResults(results);
   }
 
+  useEffect(() => {
+    const savedLang = localStorage.getItem("lang") || "ms";
+    setLanguage(savedLang);
+  }, []);
+
+  const changeLanguage = (lang: string) => {
+    localStorage.setItem("lang", lang);
+    setLanguage(lang);
+  };
+
   const chartData = {
     labels: yearlyResults.map((result) => result.year.toString()),
     datasets: [
@@ -68,11 +90,11 @@ export default function ASBDividendCalculator() {
   return (
     <>
       <Head>
-        <title>ASB Dividend Calculator - Estimate Your Returns</title>
+        <title>{translations[language].title}</title>
         <meta name="description" content="Use this ASB dividend calculator to estimate your returns with monthly deposits, investment periods, and dividend rates." />
         <meta name="keywords" content="ASB, dividend calculator, investment, finance, Malaysia, passive income" />
         <meta name="author" content="Muhammad Mustaqim" />
-        <meta property="og:title" content="ASB Dividend Calculator - Estimate Your Returns" />
+        <meta property="og:title" content={translations[language].title} />
         <meta property="og:description" content="Calculate your ASB investment growth over the years." />
         <meta property="og:url" content="https://taqim2708.github.io/asb-dividen-calculator/" />
         <meta property="og:image" content="https://taqim2708.github.io/asb-dividen-calculator/og-image.webp" />
@@ -80,7 +102,13 @@ export default function ASBDividendCalculator() {
       <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-100 p-4 md:p-10">
         <Card className="p-6 w-full max-w-md md:max-w-lg bg-white shadow-lg rounded-lg">
           <CardContent>
-            <h2 className="text-xl font-bold mb-4 text-center">ASB Dividend Calculator</h2>
+            <h2 className="text-xl font-bold mb-4 text-center">{translations[language].title}</h2>
+            <div className="mb-4 text-center">
+              <Select value={language} onChange={(e) => changeLanguage(e.target.value)} fullWidth>
+                <MenuItem value="en">English</MenuItem>
+                <MenuItem value="ms">Bahasa Melayu</MenuItem>
+              </Select>
+            </div>
             <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block mb-2 font-medium">Initial Investment Amount (RM):</label>
@@ -127,7 +155,7 @@ export default function ASBDividendCalculator() {
               </div>
             </div>
             <Button variant="contained" color="primary" fullWidth onClick={calculateASBDividend}>
-              Calculate
+              {translations[language].calculate}
             </Button>
           </CardContent>
         </Card>
